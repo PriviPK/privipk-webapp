@@ -102,6 +102,7 @@ define([
 
     // Replace `false` with your Inbox App ID
     var inboxAppID = false;
+    //var inboxAppID = "1";
 
     // Delete this code once you've added your Inbox App ID
     // ---
@@ -119,8 +120,37 @@ define([
 
     var url = 'https://api.inboxapp.com';
 
-    if (inboxAppID == "localhost") {
-      url = 'http://localhost:5555';
+    if (inboxAppID.indexOf("localhost") == 0) {
+      //url = 'http://localhost:5555';
+      var i = inboxAppID.indexOf("-")
+      if (i == -1) {
+        url = 'http://nylas:5555';  // easily remap this to a non-local machine
+      } else {
+        // need to hack this in for accessing an Inbox webapp remotely:
+        // If the nylas sync engine and the inbox webservice are runnning on host
+        // A remotely, and you want to access the web service from host B, then
+        // the JS code executing on host B will try to connect to 'nylas:5555'
+        // which only host A has it mapped to its sync engine VM in its /etc/hosts
+        // file.
+        //
+        // B could map nylas in its /etc/hosts to A's sync engine VM address,
+        // but then B would be unable to run its own sync engine and webapp
+        // because they would conflict with the nylas mapping in /etc/hosts
+        //
+        // For now, we just let host B map host A's nylas sync engine address
+        // in /etc/hosts as 'nylas' + no
+        // when host B connects to the webapp instead of localhost, it specifies
+        // localhost-<no>, where <no> is some number in [0, \inf)
+        // B has addded nylas+no to its /etc/hosts, so now the webapp will be
+        // able to connect to the remote sync engine on host A
+
+        var no = inboxAppID.substring(i + 1)
+        var port = 5555 + parseInt(no)
+        url = 'http://nylas' + no + ':' + port;
+      }
+
+      // the baobab code expects this to be localhost
+      inboxAppID = "localhost"
     }
 
     $inboxProvider.baseUrl(url).appId(inboxAppID);

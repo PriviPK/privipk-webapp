@@ -1,8 +1,6 @@
 Inbox App Scaffold - HTML5
 ========
 
-## **NOTE**: This scaffold is currently not actively maintained, and may need some TLC. Please feel free to use it and send us a pull request if you fix anything or add a feature, though. :)
-
 The Inbox HTML5 Scaffold is a full-featured mail client built on top of the Inbox API. It is a client-side AngularJS application that leverages the [Inbox Javascript SDK](https://github.com/inboxapp/inbox.js), and is intended to be a foundation for you to build your own mail client or add features that you've always wanted!
 
 The Inbox HTML5 App Scaffold includes support for:
@@ -27,73 +25,60 @@ Yes, it even has a dark theme:
 <a href="https://raw.githubusercontent.com/inboxapp/inbox-scaffold-html5/master/screenshots/screenshot_dark_theme.png"><img src="https://raw.githubusercontent.com/inboxapp/inbox-scaffold-html5/master/screenshots/screenshot_dark_theme.png" height="230" /></a>
 
 
-## By Developers, For Developers
-
-The Inbox HTML5 Scaffold is intended for developers - to use it, you need an Inbox Developer Program membership or a copy of the open-source [Inbox Sync Engine](http://github.com/inboxapp/inbox). When you download or fork the Inbox HTML5 Scaffold, you'll need to add your Inbox App ID before you can connect your account.
-
-## Try it online
-
-Try out the Inbox HTML5 Scaffold right now! It's purely client-side javascript, so we [hosted it on Github Pages](https://inboxapp.github.io/inbox-scaffold-html5/).
-
-### Using your Inbox account
-
-Already have an Inbox account? You'll need to create a new app in the [developer console](https://www.inboxapp.com/console/apps) and add `https://inboxapp.github.io/inbox-scaffold-html5/` to the callback URLs.  Then, [set your App ID](http://inboxapp.github.io/inbox-scaffold-html5/set-app-id.html) to try it out.
-
 ### Using your local Inbox instance
 
-Already running the sync engine and API server on your local machine?  [Set your App ID](http://inboxapp.github.io/inbox-scaffold-html5/set-app-id.html) to `localhost` and the Inbox HTML5 Scaffold will connect to `http://localhost:5555` instead of our API endpoint.
+Already running the sync engine and API server in a VM on your local machine?  [Set your App ID](http://inboxapp.github.io/inbox-scaffold-html5/set-app-id.html) to `localhost` and the Inbox HTML5 Scaffold will connect to `http://nylas:5555` instead of our API endpoint. Note, you need to have an `/etc/hosts` entry for
+`nylas` that maps to the IP of the VM. This IP is 192.168.10.200 by default.
 
+(I figured this out by looking [here](https://github.com/nylas/inbox-scaffold-html5/commit/708afdb061bc228883c31f37c71ba6c5a9c185cd))
 
-## Getting Started
+### Getting Started
 
-```bash
+    bash
 
-git clone  --recursive git@github.com:inboxapp/inbox-scaffold-html5.git
+    git clone  --recursive git@github.com:johnnycanencrypt/inbox-scaffold-html5.git
 
-cd inbox-scaffold-html5
+    cd inbox-scaffold-html5
 
-git submodule init
+    ./reinstall-nodejs.sh
 
-git submodule update
+    # NOTE: exit this shell, open a new one
 
-sudo apt-get install node npm gulp bower
+    ./install-npms.sh
 
-npm update
+    # FIRST:
+    # The email web app will attempt to contact the sync engine at 
+    # http://nylas:5555 => map the IP of your sync engine VM to 'nylas' 
+    # by editing your /etc/hosts file
+    #
+    #   $ vim /etc/hosts
+    #   192.168.10.200  nylas
 
-npm run-script postinstall
+    # Start the web app
 
-bower install
+    ./start.sh
 
-foreman start --port 6000
-```
+    # Assuming you have the Nylas sync engine running in the VM and reachable
+    # at http://nylas:5555, you can now go to http://localhost:7000
+    #
+    # The web interface will ask you to set the appid. Enter 'localhost' (no
+    # quotes). Now you should be able to use the web interface to manage the 
+    # email account you registered with the sync-engine (bin/inbox-auth)
 
-Then, follow the instructions under "Try it online" to set up your App ID.  You can connect to our servers or to your own local endpoint.
+### Accessing multiple accounts
 
-## Roadmap
+If you have multiple sync-engine VMs and want to access their accounts on the
+same machine, use the following hack:
 
-The Inbox HTML5 Scaffold is fairly simple and is intended to be a solid foundation. It's built to be easily hackable and extendable. You can fork it and build an entirely different email experience, or write an Angular directive that adds features and functionality you need.
+ 1. Add an entry for each machine in /etc/hosts
+    - If VM `i` has ip `ip[i]`, then add an entry in /etc/hosts:
+      + `ip[i] nylas$i` (replace `$i` with the value of `i`)
+      +  Example: 
+          - `192.168.10.201 nylas1`
+          - `10.0.0.3 nylas3`
+          - etc.
+ 2. Now, when you connect to the inbox webapp and you are asked for the Inbox
+    App ID, enter `nylas$i` if you want to access the account on VM `i`.
+    - The app ID gets cached in the browser, so if you want to access multiple
+      VMs, you'll need to use different browser sessions or different browsers
 
-In the future, we plan to:
-
-- Wrap the HTML5 Scaffold in [Atom-Shell](http://github.com/atom/atom-shell) and rewrite key Angular services to use an SQLite cache, offline action queue, and more.
-
-- Clearly define integration points for you to create your own directives and services that extend the client.
-
-- Refactor things for greater hackability.
-
-
-We'd love for you to help us achieve these goals - check out the Contributing section for more information. If these things get you really excited, check out our [Jobs page!](http://www.inboxapp.com/jobs)
-
-
-##Contributing
-
-We'd love your help making the Inbox HTML5 Scaffold better! You can join the Inbox Google Group for project updates and feature discussion. We also hang out in [##inbox on irc.freenode.net](http://webchat.freenode.net/?channels=##inbox), or you can email help@inboxapp.com.
-
-Please sign the [Contributor License Agreement](https://www.inboxapp.com/cla.html) before submitting patches. (It's similar to other projects, like NodeJS.)
-
-A more detailed guide on development, testing and contributing code is available in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-##License
-
-Please see the file [LICENSE.md](LICENSE.md) for the copyright licensing conditions attached to
-this codebase.
