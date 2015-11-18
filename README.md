@@ -36,8 +36,6 @@ Already running the sync engine and API server in a VM on your local machine?  [
 
     bash
 
-    git clone  --recursive git@github.com:johnnycanencrypt/inbox-scaffold-html5.git
-
     cd inbox-scaffold-html5
 
     ./reinstall-nodejs.sh
