@@ -10,4 +10,4 @@ sudo npm install -g npm@2.8.4
 sudo gem install foreman
 
 echo
-echo "TODO: Exit this shell and open it again"
+echo "TODO: Exit this shell and open it again (Otherwise the new npm is not picked up as far as I can tell)"
