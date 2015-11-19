@@ -28,9 +28,9 @@
         <!--<p>Paste your Inbox App ID below to test-drive the Inbox Client. If you've forked the repository to create your own app, hardcode your App ID in <code>/public/js/app.js</code>.
         </p>
         <p>You can create an app <a href="https://www.inboxapp.com/console/apps">here</a>. Make sure you set the callback URL to the URL of the app.</p>-->
-        <p>If you're using PriviPK, enter <code>localhost</code> and add an entry to your <code>/etc/hosts</code> that maps <code>nylas</code> to the IP of the VM where the sync-engine is running.</p>
-        <p>You can have multiple such entries for each one of your VMs: <code>nylas1</code>, <code>nylas2</code>, etc.</p>
-        <p>Either enter <code>localhost</code> to connect to the single VM or <code>localhost-i</code> to connect to VM no. <code>i</code>.</p>
+        <p>If you're using PriviPK, enter <code>localhost-i</code> and add an entry to your <code>/etc/hosts</code> that maps <code>nylas-i</code> to the IP of the VM where the sync-engine no. <code>i</code> is running.</p>
+        <p>You can have multiple such entries for each one of your VMs: <code>nylas0</code>, <code>nylas1</code>, <code>nylas2</code>, etc.</p>
+        <p>Enter <code>localhost-i</code> to connect to VM no. <code>i</code>,<br /> for <code>i = 0, 1, 2, ...</code>.</p>
         <br/>
         <input id="appIdField" class="form-control" style="text-align:center;" placeholder="Inbox App ID"/>
         <br/>
