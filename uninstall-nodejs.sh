@@ -9,10 +9,8 @@ sudo apt-get autoremove --purge -y
 sudo rm -rf ~/.npm ~/.node-gyp
 sudo rm -rf ~/.npmrc
 
-# TODO: Look in /usr/local/lib/node_modules
 sudo rm -rf /usr/local/lib/node_modules
 sudo rm -rf /usr/lib/node_modules
-# TODO: Look in /usr/lib/node_modules
 
 sudo rm -rf /usr/local/bin/npm
 sudo rm -rf ~/.cache/bower

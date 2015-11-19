@@ -1,22 +1,21 @@
 PriviPK web app 
 ===============
 
-This was previously known as 'Inbox App Scaffold - HTML5', and was built by the Nylas guys.
+This was previously known as 'Inbox App Scaffold - HTML5', and was built by the Nylas folks.
 
 Connecting the web app to the sync-engine VM accounts
 -----------------------------------------------------
 
-**IMPORTANT:** Assuming you have followed the guide [here](https://github.com/PriviPK/privipk-sync-engine/blob/master/README.md) and launched the PriviPK sync engine(s) in two VMs on your host machine.
+**IMPORTANT:** We assume you have followed the guide [here](https://github.com/PriviPK/privipk-sync-engine/blob/master/README.md) and launched the PriviPK sync engine(s) in two VMs on your host machine.
+
+We will setup the web application on your local machine. This has been tested to work on Nov. 19th, 2015 on Ubuntu 14.04 with nodejs v0.10.25 and npm 2.8.4. God and JavaScript-brogrammers willing, it should not break in the future. However, past experience indicates that a nodejs/npm project left untouched for a couple of months will miraculously not compile anymore, due to a JS dependency hell that npm/nodejs was supposed to prevent in the first place.
 
 **Steps** (assuming sync engines VMs are setup and connected to email accounts):
 
  1. Add the following entries to your host machine's `/etc/hosts` file:
         
-        192.168.10.200  nylas
         192.168.10.200  nylas0
         192.168.10.201  nylas1
-        127.0.0.1       kgc
-        127.0.0.1       kls
 
  2. Install the prerequisites for the PriviPK webapp on the host machine:
 
@@ -33,15 +32,16 @@ Connecting the web app to the sync-engine VM accounts
 
  4. Open two different browser sessions (You can do one normal and one incognito session. Or one Firefox and one Chrome.).
     - Go to `http://localhost:7000` in each browser session.
-    - Enter `nylas0` as the App ID for the 1st browser session
-    - Enter `nylas1` as the App ID for the 2nd browser session
+    - Enter `localhost-0` as the App ID for the 1st browser session
+      + This will connect to the account setup on the `nylas0` VM
+    - Enter `localhost-1` as the App ID for the 2nd browser session
+      + This will connect to the account setup on the `nylas1` VM
     - Now you should be able to use the web interface to separately use the 
 email accounts you registered with the sync-engine VMs.
 
- 5. Try sending and receiving emails.
+ 5. Try sending and receiving emails between the two accounts.
 
-**Note:** If you are running as single sync engine on your host machine, you can just set your App ID to `localhost` and the Inbox HTML5 Scaffold will connect to `http://nylas:5555` (instead of `localhost`). 
-Since you have set an `/etc/hosts` entry for `nylas` in Step 1, the web app will connect to the sync engine in the VM (Figured out by looking [here](https://github.com/nylas/inbox-scaffold-html5/commit/708afdb061bc228883c31f37c71ba6c5a9c185cd)).
+**Note to self:** Figured out AppID stuff by looking [here](https://github.com/nylas/inbox-scaffold-html5/commit/708afdb061bc228883c31f37c71ba6c5a9c185cd).
 
 ### Accessing multiple accounts
 
@@ -57,6 +57,33 @@ In general, if you have multiple sync-engine VMs and want to access their accoun
  2. Now, when you connect to the inbox webapp and you are asked for the Inbox
     App ID, enter `nylas$i` if you want to access the account on VM `i`.
     - **IMPORTANT:** The app ID gets cached in the browser, so if you want to access multiple VMs, you'll need to use different browser sessions or different browsers
+
+Deploying the webapp in a VM
+----------------------------
+
+It could be easier to deploy the webapp in a VM instead of deploying it on your host machine. Thus, we provided a `Vagrantfile`. 
+
+**Steps**:
+
+ 1. Launch the VM: `vagrant up`
+
+ 2. SSH in the VM: `vagrant ssh`
+
+ 3. Edit the `/etc/hosts` file on the VM (same way as explained above)
+
+ 4. Install node and NPMs on the VM. As explained above, but specifically:
+    
+        `cd /vagrant`
+        ./install-nodejs.sh
+        ./install-npms.sh
+
+ 5. Start the webapp in the VM
+        
+        ./start.sh
+
+ 6. Open two browser sessions, except you'll be accessing the web app at `http://192.168.10.202:7000` (the VM's address) instead of `http://localhost:7000`
+    - **IMPORTANT:** However, the AppID's will continue to be `localhost-0` and `localhost-1`
+
 
 Old Inbox App description
 -------------------------
